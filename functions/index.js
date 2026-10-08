@@ -4,7 +4,7 @@ const crypto = require("node:crypto");
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore, FieldValue} = require("firebase-admin/firestore");
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
-const {onDocumentCreated} = require("firebase-functions/v2/firestore");
+const {onDocumentCreated, onDocumentUpdated} = require("firebase-functions/v2/firestore");
 const {defineSecret} = require("firebase-functions/params");
 const webpush = require("web-push");
 
@@ -59,7 +59,7 @@ exports.submitEnquiry = onCall({...CALL, maxInstances: 20}, async (r) => {
     tx.set(rateRef, {count: count + 1, expiresAt: new Date(Date.now() + 86400000)});
     tx.create(ref, {
       reference, name, email, subject, message, source: "contact",
-      status: "New", priority: "Normal", assigneeUid: null,
+      status: "New", priority: subject === "Private order request" ? "High" : "Normal", assigneeUid: null,
       notes: [], createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp()
     });
@@ -242,6 +242,27 @@ exports.onEnquiryCreated = onDocumentCreated({
     throw err;
   }
   await broadcastPush("LA INFINITÉ", "New client enquiry awaiting review", "/admin/");
+});
+
+// Only provider-verified payment transitions will result in a paid-order alert.
+// All order writes remain server-only, enforced by Firestore rules.
+exports.onOrderPaid = onDocumentUpdated({
+  document: "orders/{id}", region: REGION, secrets: [PUSH_PRIVATE]
+}, async (event) => {
+  if (!event.data) return;
+  const before = event.data.before.data(), after = event.data.after.data();
+  if (before?.paymentStatus === "paid" || after?.paymentStatus !== "paid") return;
+  const id = event.params.id;
+  const eventRef = db.doc("operationsEvents/order_paid_" + id);
+  try {
+    await eventRef.create({kind: "order", title: "Paid order awaiting fulfilment",
+      priority: "High", reference: String(after.orderRef || id),
+      read: false, targetId: id, createdAt: FieldValue.serverTimestamp()});
+  } catch (error) {
+    if (error.code === 6 || error.code === "already-exists") return;
+    throw error;
+  }
+  await broadcastPush("LA INFINITÉ", "A paid order needs attention", "/admin/");
 });
 
 exports.listOperationsEvents = onCall(CALL, async (r) => {
