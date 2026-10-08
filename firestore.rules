@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function admin() { return signedIn() && request.auth.token.admin == true; }
+    function self(uid) { return signedIn() && request.auth.uid == uid; }
+    match /enquiries/{id} { allow read: if admin(); allow write: if false; }
+    match /invitations/{id} { allow read: if admin(); allow write: if false; }
+    match /memberships/{uid} { allow read: if self(uid) || admin(); allow write: if false; }
+    match /orders/{id} { allow read: if admin() || (signedIn() && resource.data.userId == request.auth.uid); allow write: if false; }
+    match /users/{uid} { allow read: if self(uid) || admin(); allow write: if false; }
+    match /products/{id} { allow read: if admin() || resource.data.published == true; allow write: if false; }
+    match /notifications/{id} { allow read: if admin() || (signedIn() && resource.data.userId == request.auth.uid); allow write: if false; }
+    match /adminPush/{uid}/subscriptions/{subscriptionId} { allow read, write: if false; }
+    match /auditLogs/{id} { allow read: if admin(); allow write: if false; }
+    match /rateLimits/{id} { allow read, write: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
