@@ -1,10 +1,10 @@
 {
-  "name": "La Infinitè™",
+  "name": "LA INFINITÉ",
   "company": "LA INFINITÉ (Pty) Ltd",
   "email": "maisonlainfinite@outlook.com",
   "founded": "2019",
-  "origin": "https://la-infinite-maison.azurespark.chatgpt.site",
+  "origin": "https://maisonlainfinite.github.io",
   "basePath": "",
-  "preview": true,
+  "preview": false,
   "currency": "USD"
 }

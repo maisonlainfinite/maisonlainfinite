@@ -1,7 +1,8 @@
-/* La Infinitè™ storefront. No customer credentials or payments are collected here. */
+/* LA INFINITÉ storefront. No customer credentials or payments are collected here. */
 (() => {
   'use strict';
   const config = JSON.parse(document.getElementById('site-data').textContent);
+  config.basePath = new URL(document.baseURI).pathname.replace(/\/$/, '');
   const products = config.products;
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
@@ -238,7 +239,7 @@
   $$('[data-newsletter]').forEach((form) => form.addEventListener('submit', (e) => {
     e.preventDefault(); if (!form.reportValidity()) return;
     const email = new FormData(form).get('email').trim();
-    $('#newsletter-mail').href = emailUrl('Newsletter subscription request — La Infinitè', `Hello La Infinitè,\n\nPlease add ${email} to the Maison's email updates. I consent to receiving news about creations, collection previews and Maison services, and understand that I can unsubscribe at any time. I have read the Privacy notice.\n\nThank you.`);
+    $('#newsletter-mail').href = emailUrl('Newsletter subscription request — LA INFINITÉ', `Hello LA INFINITÉ,\n\nPlease add ${email} to the Maison's email updates. I consent to receiving news about creations, collection previews and Maison services, and understand that I can unsubscribe at any time. I have read the Privacy notice.\n\nThank you.`);
     $('[data-form-status]', form).textContent = 'Your subscription request is ready to send by email.';
     openDialog('newsletter-dialog');
   }));
@@ -253,13 +254,13 @@
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault(); if (!contactForm.reportValidity()) return;
       const d = new FormData(contactForm);
-      prepareEmail(contactForm, `${d.get('subject')} — La Infinitè`, `Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\n${d.get('message')}\n\nI have read the Privacy notice and understand that my information will be used to respond to this enquiry.`);
+      prepareEmail(contactForm, `${d.get('subject')} — LA INFINITÉ`, `Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\n${d.get('message')}\n\nI have read the Privacy notice and understand that my information will be used to respond to this enquiry.`);
     });
   }
   $('[data-membership]')?.addEventListener('submit', (e) => {
     e.preventDefault(); const form = e.currentTarget; if (!form.reportValidity()) return;
     const d = new FormData(form);
-    prepareEmail(form, 'Maison Circle — Invitation request', `Hello La Infinitè,\n\nI would like to receive an invitation to Maison Circle when client accounts open.\n\nName: ${d.get('name')}\nEmail: ${d.get('email')}\n\nI consent to being contacted about Maison Circle membership and have read the Privacy notice.\n\nThank you.`);
+    prepareEmail(form, 'Maison Circle — Invitation request', `Hello LA INFINITÉ,\n\nI would like to receive an invitation to Maison Circle when client accounts open.\n\nName: ${d.get('name')}\nEmail: ${d.get('email')}\n\nI consent to being contacted about Maison Circle membership and have read the Privacy notice.\n\nThank you.`);
   });
   function selectAccountTab(key, focus = false) {
     $$('[data-account-tab]').forEach((b) => { const active = b.dataset.accountTab === key; b.setAttribute('aria-selected', String(active)); b.tabIndex = active ? 0 : -1; if (active && focus) b.focus(); });
@@ -320,8 +321,8 @@
     if (!country) { $('[data-cart-status]').textContent = 'Please select your delivery destination first.'; $('[data-shipping-country]').focus(); return; }
     const cost = shippingFor(country);
     const lines = cart.map((item) => { const p = products.find((x) => x.id === item.id); return `${item.quantity} × ${p.fullName}${item.euSize ? ` — preferred ${item.system} ${converted(item.euSize, item.system)} (indicative EU ${item.euSize})` : ''}: ${formatMoney(p.price * item.quantity)} USD`; });
-    const body = `Hello La Infinitè,\n\nI would like to request the following order:\n\n${lines.join('\n')}\n\nDelivery destination: ${regionNames[country]}\nCountry and postal code: [Please complete]\nSubtotal: ${formatMoney(subtotal())} USD\nShipping: ${cost === null ? 'Individual quote requested' : `${formatMoney(cost)} USD`}\n${cost === null ? 'Final total: to be confirmed after shipping quote' : `Estimated total: ${formatMoney(subtotal() + cost)} USD`}\n\nPlease confirm availability, sizing, applicable taxes or duties, production timing and final payment arrangements. I understand that this enquiry does not reserve stock or constitute a confirmed order.\n\nName: [Please complete]\n\nThank you.`;
-    const href = emailUrl('Personal order request — La Infinitè', body);
+    const body = `Hello LA INFINITÉ,\n\nI would like to request the following order:\n\n${lines.join('\n')}\n\nDelivery destination: ${regionNames[country]}\nCountry and postal code: [Please complete]\nSubtotal: ${formatMoney(subtotal())} USD\nShipping: ${cost === null ? 'Individual quote requested' : `${formatMoney(cost)} USD`}\n${cost === null ? 'Final total: to be confirmed after shipping quote' : `Estimated total: ${formatMoney(subtotal() + cost)} USD`}\n\nPlease confirm availability, sizing, applicable taxes or duties, production timing and final payment arrangements. I understand that this enquiry does not reserve stock or constitute a confirmed order.\n\nName: [Please complete]\n\nThank you.`;
+    const href = emailUrl('Personal order request — LA INFINITÉ', body);
     const fallback = $('[data-order-email]'); fallback.href = href; fallback.hidden = false;
     $('[data-cart-status]').textContent = 'Your request is ready in your email app. Please complete your details and send it. Your bag has been kept on this device.';
     location.href = href;
@@ -338,7 +339,7 @@
     const register = (tool) => {
       try { Promise.resolve(document.modelContext.registerTool(tool, { signal: lifecycle.signal })).catch(() => {}); } catch { /* Unsupported browsers continue normally. */ }
     };
-    register({ name: 'search_maison_catalogue', title: 'Search La Infinitè creations', description: 'Read the current product catalogue. Does not reserve inventory or create an order.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { query: { type: 'string', maxLength: 100 } }, required: ['query'], additionalProperties: false }, execute(input) {
+    register({ name: 'search_maison_catalogue', title: 'Search LA INFINITÉ creations', description: 'Read the current product catalogue. Does not reserve inventory or create an order.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { query: { type: 'string', maxLength: 100 } }, required: ['query'], additionalProperties: false }, execute(input) {
       if (!input || typeof input.query !== 'string' || input.query.length > 100) throw new Error('Provide a query of at most 100 characters.');
       return products.filter((p) => productMatches(p, input.query)).map((p) => ({ id: p.id, name: p.name, price: p.price, currency: 'USD', availability: p.availability, url: route(`products/${p.id}/`) }));
     } });
