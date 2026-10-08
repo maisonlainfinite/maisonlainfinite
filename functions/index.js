@@ -67,6 +67,16 @@ exports.submitEnquiry = onCall({...CALL, maxInstances: 20}, async (r) => {
   return {received: true, reference};
 });
 
+exports.subscribeNewsletter = onCall({...CALL, maxInstances: 15}, async (r) => {
+  if (r.data?.consent !== true) throw new HttpsError("invalid-argument", "Consent is required.");
+  const email = emailValue(r.data?.email);
+  const ref = db.collection("newsletterSubscribers").doc(hash(email));
+  await ref.set({email, consent: true, source: "website", status: "Pending verification",
+    updatedAt: FieldValue.serverTimestamp(), subscribedAt: FieldValue.serverTimestamp()}, {merge: true});
+  // No marketing messages are sent until the mail provider and verification flow are connected.
+  return {received: true, status: "Pending verification"};
+});
+
 exports.getOperationsOverview = onCall(CALL, async (r) => {
   ensureAdmin(r);
   const [enquiries, pending, invitations, orders] = await Promise.all([
@@ -139,8 +149,8 @@ exports.createMaisonInvitation = onCall(CALL, async (r) => {
   });
   await audit(uid, "maisonCircle.invitation.create", ref.id, null, {email});
   return {id: ref.id, email, expiresAt: expires.toISOString(),
-    inviteUrl: "https://maisonlainfinite.github.io/account/?invite=" + encodeURIComponent(ref.id) +
-      "&token=" + encodeURIComponent(token)};
+    inviteUrl: "https://maisonlainfinite.github.io/circle/accept/#i=" + encodeURIComponent(ref.id) +
+      "&t=" + encodeURIComponent(token)};
 });
 
 exports.listMaisonInvitations = onCall(CALL, async (r) => {
