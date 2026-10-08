@@ -38,8 +38,13 @@ def header(route):
     nav=''.join(link(s+'/',n,aria_current='page' if route==s+'/' else 'false') for s,n in NAV if s in ['new-in','women','handbags','gifts'])
     return f'''<a class="skip" href="#main">Skip to content</a>
     
+    <div class="promo-strip" aria-label="Featured collections">
+      <a class="promo-link" href="{url('women/')}">NEW IN / WOMEN</a>
+      <a class="promo-link" href="{url('new-in/')}" hidden>DISCOVER / NEW IN</a>
+      <a class="promo-link" href="{url('gifts/')}" hidden>GIFTS FOR THE SEASON</a>
+    </div>
     <header class="masthead"><div class="header-main"><div class="header-left"><button class="icon-button" data-open="menu-dialog" aria-label="Open menu">{icon('menu')}<span class="header-label">Menu</span></button>{link('contact/','Contact','header-contact fine')}</div>
-    <a class="brand" href="{url('')}" aria-label="LA INFINITÉ home">LA INFINITÉ<sup>™</sup></a>
+    <a class="brand" href="{url('')}" aria-label="LA INFINITÉ home">LA INFINITÉ</a>
     <div class="header-right"><button class="icon-button" data-open="search-dialog" aria-label="Search the Maison">{icon('search')}</button>{link('account/',icon('user'),'icon-button account-icon',aria_label='My account')}{link('cart/',icon('bag')+'<span class="cart-counter" data-cart-count>0</span>','icon-button',aria_label='Shopping bag')}</div></div>
     <nav class="desktop-nav" aria-label="Featured collections">{nav}{link("about/","The Maison")}</nav></header>'''
 def newsletter():
@@ -85,7 +90,7 @@ def write(route,title,desc,body,crumbs=None,products=None,product=None,show_news
     path=ROOT/(route+'index.html' if route else 'index.html');path.parent.mkdir(parents=True,exist_ok=True);path.write_text(doc)
     ROUTES.append(route)
 def card(p):
-    return f'''<article class="product-card" data-product-card data-id="{p['id']}" data-category="{p['category']}" data-price="{p['price']}" data-availability="{'request' if p['requestOnly'] else 'made-to-order'}"><span class="tag">{p['availability']}</span><a class="photo" href="{url('products/'+p['id']+'/')}" aria-label="Discover {esc(p['name'])}">{image(p['images'][0],p['fullName']+' — '+p['imageLabels'][0],width='1000',height='1000')}</a><div class="card-info"><div><h3>{link('products/'+p['id']+'/',esc(p['name']))}</h3><div class="meta">{esc(p['colour'])} · Made in Italy</div></div><span class="card-price">{money(p['price'])}</span></div></article>'''
+    return f'''<article class="product-card" data-product-card data-id="{p['id']}" data-category="{p['category']}" data-price="{p['price']}" data-availability="{'request' if p['requestOnly'] else 'made-to-order'}"><a class="photo" href="{url('products/'+p['id']+'/')}" aria-label="Discover {esc(p['name'])}">{image(p['images'][0],p['fullName']+' — '+p['imageLabels'][0],width='1000',height='1000')}</a><div class="card-info"><div><h3>{link('products/'+p['id']+'/',esc(p['name']))}</h3><div class="meta">{esc(p['colour'])} · Made in Italy</div></div><span class="card-price">{money(p['price'])}</span></div></article>'''
 def home():
     p=PRODUCTS[0]
     body=f'''<section class="hero"><div class="hero-copy"><p class="eyebrow">LA INFINITÉ / 01</p><h1>Zebra Stiletto</h1><p class="description">Zebra leather. Bordeaux lining. Made in Italy.</p><div class="actions">{link('products/zebra-stiletto/','Explore the piece ↗','text-link')}</div></div><a class="hero-art" href="{url('products/zebra-stiletto/')}" aria-label="Explore the Zebra Stiletto">{image(p['images'][0],'Zebra Stiletto, three-quarter view','eager',fetchpriority='high',width='1000',height='1000')}</a></section>
@@ -93,7 +98,8 @@ def home():
     write('',BRAND+' | Handcrafted in Italy','The Zebra Stiletto and Sac L’Ivoire, created in Italy for LA INFINITÉ.',body)
 
 def controls():
-    return '''<div class="collection-controls"><div class="filter-group"><label>Category<select data-filter="category" aria-label="Filter by category"><option value="all">All creations</option><option value="Shoes">Shoes</option><option value="Handbags">Handbags</option></select></label><label>Availability<select data-filter="availability" aria-label="Filter by availability"><option value="all">All availability</option><option value="made-to-order">Made to order</option><option value="request">By request</option></select></label><label>Price<select data-filter="price" aria-label="Filter by price"><option value="all">All prices</option><option value="under400">Under $400</option><option value="over400">$400 and above</option></select></label></div><label class="sort-label">Sort by<select data-sort><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="name">Name: A–Z</option></select></label></div>'''
+    return '''<div class="collection-controls"><details class="catalog-filter-menu"><summary>Filter &amp; sort <span class="active-filter-count" data-filter-count aria-label="Active filters"></span></summary><div class="catalog-filter-panel"><div class="filter-group"><label>Category<select data-filter="category" aria-label="Filter by category"><option value="all">All creations</option><option value="Shoes">Shoes</option><option value="Handbags">Handbags</option></select></label><label>Availability<select data-filter="availability" aria-label="Filter by availability"><option value="all">All availability</option><option value="made-to-order">Made to order</option><option value="request">By request</option></select></label><label>Price<select data-filter="price" aria-label="Filter by price"><option value="all">All prices</option><option value="under400">Under $400</option><option value="over400">$400 and above</option></select></label></div><label class="sort-label">Sort by<select data-sort><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="name">Name: A–Z</option></select></label><button class="filter-reset" type="button" data-clear-filters>Clear filters</button></div></details></div>'''
+
 def collection(slug,title):
     ps=[p for p in PRODUCTS if slug in p['collections']]
     intros={'new-in':'The latest expressions of the Maison. Discover the pieces that begin a new chapter.','handbags':'Introducing L’Ivoire, the first handbag of LA INFINITÉ. Conceived with distinction. Handcrafted in Italy.','women':'Distinctive shoes and leather goods, brought to life through Italian craftsmanship.','gifts':'A considered gesture. Discover creations made to be treasured.'}

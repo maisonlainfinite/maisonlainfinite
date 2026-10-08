@@ -50,3 +50,43 @@ h2{font-size:clamp(1.5rem,2.35vw,2.6rem)}
  .footer-wordmark{font-size:clamp(1.35rem,7vw,2.8rem)}
 }
 @media(max-width:380px){.brand{font-size:.7rem}.header-main{padding-inline:10px}}
+
+/* Finishing refinements — brand signature, slim promotions, sticky navigation */
+html{scroll-padding-top:102px}
+.promo-strip{min-height:27px;display:flex;align-items:center;justify-content:center;background:var(--blue);color:var(--cream);text-align:center;padding:3px 16px}
+.promo-link{font:400 9px/1.7 var(--mono);letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+.promo-link:hover{text-decoration:underline;text-underline-offset:3px}
+.promo-link[hidden]{display:none!important}
+.masthead{position:sticky;top:0;z-index:70}
+.brand{font-family:"Poppins",sans-serif;font-weight:500;font-size:clamp(1.02rem,1.5vw,1.24rem);letter-spacing:.015em}
+.header-right a[aria-label="Shopping bag"]{gap:8px;padding-right:3px}
+.cart-counter{margin-left:0;min-width:1.3ch;display:inline-block;font-size:10px;line-height:1.2;text-align:center}
+.product-card>.tag{display:none}
+/* The filter controls live inside one compact native disclosure menu. */
+.collection-controls{justify-content:flex-end;align-items:center;padding:10px 0;margin-bottom:16px;overflow:visible}
+.catalog-filter-menu{position:relative;min-width:0}
+.catalog-filter-menu>summary{display:flex;align-items:center;justify-content:space-between;gap:18px;list-style:none;cursor:pointer;padding:9px 3px 9px 12px;font-size:11px;letter-spacing:.04em}
+.catalog-filter-menu>summary::-webkit-details-marker{display:none}
+.catalog-filter-menu>summary:after{content:"";display:inline-block;width:7px;height:7px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s}
+.catalog-filter-menu[open]>summary:after{transform:translateY(2px) rotate(225deg)}
+.catalog-filter-menu>summary:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.catalog-filter-menu .active-filter-count{font-size:9px;color:var(--muted)}
+.catalog-filter-menu .active-filter-count:empty{display:none}
+.catalog-filter-panel{position:absolute;right:0;top:calc(100% + 5px);z-index:25;width:min(345px,calc(100vw - 32px));padding:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 14px 34px rgba(19,37,56,.12)}
+.catalog-filter-panel .filter-group{display:grid;grid-template-columns:1fr;gap:17px}
+.catalog-filter-panel .filter-group label,.catalog-filter-panel .sort-label{display:grid;grid-template-columns:1fr;gap:5px;font-size:10px;letter-spacing:.025em}
+.catalog-filter-panel .filter-group select,.catalog-filter-panel .sort-label select{width:100%;max-width:none;padding:9px 26px 9px 10px;border:1px solid var(--line);background:var(--paper);font-size:11px;letter-spacing:0}
+.catalog-filter-panel .sort-label{margin-top:17px}
+.catalog-filter-panel .filter-reset{display:block;margin-top:18px;padding:6px 0;font-size:10px;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:760px){
+ html{scroll-padding-top:64px}
+ .promo-strip{min-height:25px;padding:3px 12px}
+ .promo-link{font-size:8px;letter-spacing:.1em}
+ .brand{font-family:"Poppins",sans-serif;font-weight:500;font-size:clamp(.8rem,3.65vw,1.05rem);letter-spacing:0}
+ .header-right{gap:8px}
+ .header-right a[aria-label="Shopping bag"]{min-width:47px;gap:8px;padding-right:4px}
+ .cart-counter{margin-left:0;font-size:10px;min-width:1.3ch}
+ .collection-controls{padding:8px 0;margin-bottom:15px}
+ .catalog-filter-menu>summary{font-size:11px}
+ .catalog-filter-panel{padding:18px}
+}

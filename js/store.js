@@ -64,6 +64,26 @@
     });
   });
 
+  // Rotate one restrained, clickable collection announcement at a time.
+  const promoLinks = $('.promo-link');
+  if (promoLinks.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const bar = $('.promo-strip');
+    let index = 0, interval;
+    const next = () => {
+      promoLinks[index].hidden = true;
+      index = (index + 1) % promoLinks.length;
+      promoLinks[index].hidden = false;
+    };
+    const stop = () => { window.clearInterval(interval); interval = undefined; };
+    const start = () => { if (!interval && !document.hidden) interval = window.setInterval(next, 6500); };
+    bar?.addEventListener('mouseenter', stop);
+    bar?.addEventListener('mouseleave', start);
+    bar?.addEventListener('focusin', stop);
+    bar?.addEventListener('focusout', (event) => { if (!bar.contains(event.relatedTarget)) start(); });
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+    start();
+  }
+
   // Essential and optional browser storage are deliberately separate.
   function cookieValue(name) {
     const found = document.cookie.split('; ').find((x) => x.startsWith(name + '='));
@@ -191,6 +211,9 @@
     if (!catalogue) return;
     const selected = Object.fromEntries($$('[data-filter]', catalogue).map((x) => [x.dataset.filter, x.value]));
     const order = $('[data-sort]', catalogue).value;
+    const activeCount = Object.values(selected).filter((v) => v !== 'all').length + (order === 'featured' ? 0 : 1);
+    const counter = $('[data-filter-count]', catalogue);
+    if (counter) counter.textContent = activeCount ? String(activeCount) : '';
     const cards = $$('[data-product-card]', catalogue);
     let shown = 0;
     cards.forEach((card) => {
@@ -219,12 +242,12 @@
   if (catalogue) {
     if ($('#page-search')) $('#page-search').value = searchQuery;
     $$('[data-filter], [data-sort]', catalogue).forEach((x) => x.addEventListener('change', applyFilters));
-    $('[data-clear-filters]', catalogue).addEventListener('click', () => {
+    $('[data-clear-filters]', catalogue).forEach((button) => button.addEventListener('click', () => {
       $$('[data-filter]', catalogue).forEach((x) => { x.value = 'all'; }); $('[data-sort]', catalogue).value = 'featured';
       searchQuery = ''; if ($('#page-search')) $('#page-search').value = '';
       if (catalogue.hasAttribute('data-search-page')) history.replaceState(null, '', route('search/'));
       applyFilters();
-    });
+    }));
     applyFilters();
   }
 
