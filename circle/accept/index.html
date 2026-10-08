@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#132538">
+<title>Private invitation | Maison Circle — LA INFINITÉ</title>
+<link rel="stylesheet" href="../../styles/maison.css">
+<script src="../../js/firebase-config.js"></script><script defer type="module" src="../../js/circle-accept.mjs"></script>
+<style>
+.circle-shell{max-width:560px;margin:0 auto;padding:90px 22px 130px}
+.circle-shell h1{font-family:"Poppins",sans-serif;font-size:clamp(2.5rem,5vw,3.5rem);margin:0 0 22px}
+.circle-shell p{margin:0 0 22px;font-size:12px}
+.circle-shell label{display:block;margin:20px 0 7px;font-size:12px}
+.circle-shell input{width:100%;min-height:46px;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:0}
+.circle-shell .button{margin:17px 12px 5px 0}.circle-actions{display:flex;flex-wrap:wrap;gap:8px}
+.circle-shell .status-message{white-space:pre-line;padding:10px 0}
+.circle-header{padding:18px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.circle-header>a:first-child{font:500 16px "Poppins",sans-serif;text-decoration:none}
+.circle-header .fine{font-size:10px}
+</style></head><body>
+<header class="circle-header"><a href="../../">LA INFINITÉ</a><span class="fine">PRIVATE / MAISON CIRCLE</span></header>
+<main class="circle-shell">
+<p class="eyebrow">A PERSONAL INVITATION</p><h1>Welcome to the Circle.</h1>
+<p>An invitation is reserved for its intended recipient. To accept, sign in or create a client account using the same email address that received the invitation.</p>
+<div id="missing" hidden><p>This invitation link is incomplete. Please request a fresh link from Client Services.</p><a href="../../contact/" class="button secondary">Contact the Maison</a></div>
+<div id="pending" hidden><p id="step-status" role="status">Checking your invitation…</p></div>
+<section id="gate" hidden><div class="circle-actions"><button id="mode-register" type="button" class="button secondary">Create an account</button><button id="mode-signin" type="button" class="button secondary">I already have an account</button></div>
+<form id="customer-auth"><label for="email">Email address</label><input id="email" type="email" required autocomplete="email">
+<label for="password">Password</label><input id="password" type="password" minlength="10" required autocomplete="new-password">
+<button id="auth-submit" type="submit" class="button">Create secure account</button></form></section>
+<section id="verify" hidden><p>Check your inbox and verify your email address using the message sent by Firebase Authentication, then return here.</p><button id="resend" class="button secondary" type="button">Resend verification</button><button id="check-verified" class="button" type="button">I have verified my email</button></section>
+<section id="accept" hidden><p>Your verified account is ready. Accept your personal invitation to join Maison Circle.</p><button id="accept-button" class="button" type="button">Accept invitation</button></section>
+<section id="success" hidden><h2>You're part of the Maison.</h2><p>Your Maison Circle membership is now active. Welcome.</p><a href="../../rewards/" class="button secondary">Explore Maison Circle</a></section>
+<p id="feedback" class="status-message" role="status"></p>
+<p class="fine muted">Invitations expire after seven days. Contact <a href="mailto:maisonlainfinite@outlook.com">maisonlainfinite@outlook.com</a> if you need personal assistance.</p>
+</main></body></html>
