@@ -1,12 +1,12 @@
 [
   {
-    "id": "zebra-stiletto", "name": "Zebra Stiletto", "fullName": "Maison La Infinitè — Zebra Stiletto", "price": 339, "currency": "USD", "category": "Shoes", "collections": ["women", "new-in", "gifts"], "colour": "Zebra / Bordeaux", "material": "Italian leather", "availability": "Made to order", "requestOnly": false,
+    "id": "zebra-stiletto", "name": "Zebra Stiletto", "fullName": "Maison LA INFINITÉ — Zebra Stiletto", "price": 339, "currency": "USD", "category": "Shoes", "collections": ["women", "new-in", "gifts"], "colour": "Zebra / Bordeaux", "material": "Italian leather", "availability": "Made to order", "requestOnly": false,
     "description": "A sharply pointed toe. A slender stiletto. Expressive zebra leather with a rich Bordeaux interior. The Maison’s signature pump, handcrafted in Italy.",
     "images": ["la-nfinit--shoes-quarter.jpg", "la-nfinit--shoes-side.jpg", "la-nfinit--shoes-top_bottom.jpg", "la-nfinit--shoes-with_box.jpg", "la-nfinit--shoes-drawing.jpg"],
     "imageLabels": ["Three-quarter view", "Side profile", "Upper and sole", "Collector’s packaging", "Design drawing"]
   },
   {
-    "id": "sac-livoire", "name": "Sac L’Ivoire", "fullName": "Maison La Infinitè — Sac L’Ivoire", "price": 500, "currency": "USD", "category": "Handbags", "collections": ["handbags", "women", "new-in", "gifts"], "colour": "Ivory / Espresso", "material": "Crocodile leather", "availability": "By request", "requestOnly": true,
+    "id": "sac-livoire", "name": "Sac L’Ivoire", "fullName": "Maison LA INFINITÉ — Sac L’Ivoire", "price": 500, "currency": "USD", "category": "Handbags", "collections": ["handbags", "women", "new-in", "gifts"], "colour": "Ivory / Espresso", "material": "Crocodile leather", "availability": "By request", "requestOnly": true,
     "description": "The first handbag of the Maison. Sculptural lines, contrasting ivory and espresso panels, and a distinctive crocodile leather finish. Handcrafted in Le Marche, Italy.",
     "images": ["la-infinit--30-accessory-quarter.jpg", "la-infinit--30-accessory-front.jpg", "la-infinit--30-accessory-side.jpg", "la-infinit--30-accessory-back.jpg", "la-infinit--30-accessory-detail.jpg", "la-infinit--30-accessory-over_box.jpg", "la-infinit--30-accessory-with_box.jpg"],
     "imageLabels": ["Three-quarter view", "Front view", "Side profile", "Back view", "Leather and signature detail", "Presentation box", "Bag and packaging"]
