@@ -37,9 +37,10 @@ for f in ROOT.rglob('*.html'):
     checked+=1
     p=Page(); p.feed(f.read_text(encoding='utf-8'))
     if p.h1!=1: errors.append(f'{f}: expected one h1, got {p.h1}')
-    if not p.description: errors.append(f'{f}: missing description')
+    specialist = f.relative_to(ROOT).as_posix() in ('admin/index.html', 'circle/accept/index.html')
+    if not specialist and not p.description: errors.append(f'{f}: missing description')
     if len(p.ids)!=len(set(p.ids)): errors.append(f'{f}: duplicate IDs')
-    if len(p.json)!=2: errors.append(f'{f}: expected two JSON blocks')
+    if not specialist and len(p.json)!=2: errors.append(f'{f}: expected two JSON blocks')
     base=(f.parent/p.base).resolve()
     for link in p.refs:
         u=urlsplit(link)

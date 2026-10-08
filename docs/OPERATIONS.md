@@ -30,14 +30,14 @@ Security: default-deny Firestore rules, two unique Firebase Auth users with veri
 3. Populate the public, NON-SECRET values in `js/firebase-config.js`. API key / authDomain / projectId / appId are not administrator credentials. Never place service-account keys, provider secrets or VAPID private keys in the repo.
 4. Install dependencies under `functions/`; deploy `firebase deploy --only firestore:rules,functions` using your authorized Firebase CLI session. The Firebase project's Blaze billing plan may be required for functions.
 5. Create two distinct Firebase Auth users for yourself and Emily; run `node functions/scripts/grant-admin.cjs your@email.example` once for each email with locally configured Application Default Credentials. Sign out/in to refresh claims.
-6. For optional web push, create VAPID keys and configure `WEB_PUSH_PUBLIC_KEY` (server environment and public web config) and `WEB_PUSH_PRIVATE_KEY` (Firebase Secret Manager). Deploy the push trigger. Each admin can enable notifications from a click in their dashboard. iOS requires an installed Home Screen web app, HTTPS and explicit permission.
+6. For optional web push, create VAPID keys and configure `WEB_PUSH_PUBLIC_KEY` (server environment and public web config) and `WEB_PUSH_PRIVATE_KEY` (Firebase Secret Manager). Deploy the push trigger. Each admin can enable notifications from a click in their dashboard. iOS requires an installed Home Screen web app, HTTPS and explicit permission. The paid-order notification hook only reacts when server-managed paymentStatus changes to "paid"; checkout has not been implemented.
 7. Test an actual enquiry using the public form and confirm the Firestore document and admin view before treating Firebase intake as live.
 
 ## Phase gates
 A. Firebase project binding, Auth, App Check and Firestore Rules: **requires owner configuration/deployment**.
-B. Enquiries and Maison Circle invitations: **implemented in source; requires A before production**.
+B. Enquiries, pending-verification newsletter records and Maison Circle invitations (including verified-email acceptance): **implemented in source; requires A before production**. Secure invitation links are generated for manual sharing; they do not send email automatically.
 C. Admin dashboard and optional web push: **implemented in source; requires A and VAPID setup for push**.
-D. Customer registrations, live catalogue/inventory, checkout/orders, refunds, search and analytics: **not yet implemented**; planned after identity and backend are verified.
+D. General customer account management, live catalogue/inventory, checkout/orders, refunds, search and analytics: **not yet implemented**; planned after identity and backend are verified.
 
 ## Payments and settlement
 Storefront currency remains USD. South Africa appears on Stripe's extended network rather than as a standard direct merchant market. Evaluate local processor Paystack for Visa/Mastercard/Amex, and PayPal for separate wallet acceptance. Verify underwriting, USD transaction/settlement, card wallet support, fees and company/bank requirements before implementing providers. No client-side payment success or unverified fulfillment updates.

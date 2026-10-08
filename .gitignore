@@ -5,3 +5,10 @@ __pycache__/
 .env
 .env.*
 !.env.example
+.firebase/
+firestore-debug.log
+firebase-debug.log
+*service-account*.json
+*serviceAccount*.json
+*credentials*.json
+functions/.env*
