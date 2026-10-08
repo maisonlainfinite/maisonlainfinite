@@ -26,6 +26,7 @@ function switchTab(tab) {
   $all("[data-panel]").forEach((e)=>e.classList.toggle("active",e.dataset.panel===tab));
   if(tab==="enquiries")loadEnquiries(true);
   if(tab==="circle")loadInvitations();
+  if(tab==="subscribers")loadSubscribers();
   if(tab==="activity")loadActivity("activity-list");
 }
 $all("[data-tab]").forEach((e)=>e.addEventListener("click",()=>switchTab(e.dataset.tab)));
@@ -98,6 +99,17 @@ byId("invite-form").addEventListener("submit",async(e)=>{
     await Promise.all([loadInvitations(),loadOverview()]);
   }catch(error){alert(safely(error));}finally{button.disabled=false;}
 });
+async function loadSubscribers(){
+  const node=byId("subscriber-list");node.replaceChildren();
+  try {
+    const data=await action("listNewsletterSubscribers");
+    if(!data.items.length)node.append(element("p","quiet","No newsletter requests yet."));
+    data.items.forEach((record)=>card(node,record.email,dateText(record.updatedAt),
+      "Consent request received · "+(record.source||"website"),"",null,record.status));
+  }catch(error){node.append(element("p","quiet",safely(error)));}
+}
+byId("refresh-subscribers").addEventListener("click",loadSubscribers);
+
 async function loadInvitations(){
   const node=byId("invite-list");node.replaceChildren();
   try {

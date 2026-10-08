@@ -77,6 +77,16 @@ exports.subscribeNewsletter = onCall({...CALL, maxInstances: 15}, async (r) => {
   return {received: true, status: "Pending verification"};
 });
 
+exports.listNewsletterSubscribers = onCall(CALL, async (r) => {
+  ensureAdmin(r);
+  const q = await db.collection("newsletterSubscribers").orderBy("updatedAt", "desc").limit(30).get();
+  return {items: q.docs.map((doc) => {
+    const d = doc.data();
+    return {email: d.email, status: d.status, source: d.source,
+      updatedAt: d.updatedAt?.toDate().toISOString() || null};
+  })};
+});
+
 exports.getOperationsOverview = onCall(CALL, async (r) => {
   ensureAdmin(r);
   const [enquiries, pending, invitations, orders] = await Promise.all([
