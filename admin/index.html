@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Operations | LA INFINITÉ</title>
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#132538">
+<link rel="icon" href="../assets/maison-icon.svg" type="image/svg+xml">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="stylesheet" href="../styles/operations.css">
+<script src="../js/firebase-config.js"></script>
+<script type="module" src="../js/admin.mjs"></script>
+</head><body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="ops-header"><a class="ops-brand" href="../">LA INFINITÉ</a><span class="ops-title">MAISON / OPERATIONS</span><div class="user-controls"><span id="user-email" class="quiet"></span><button id="logout" type="button" hidden>Sign out</button></div></header>
+<main id="content">
+<section id="setup" class="gate" hidden><p class="eyebrow">SYSTEM CONFIGURATION</p><h1>Connect the Maison.</h1><p>The operations workspace requires the private Firebase project to be configured and deployed. No simulated business data is displayed.</p><p class="fine">See <code>docs/OPERATIONS.md</code> in the repository for setup steps.</p></section>
+<section id="login" class="gate" hidden><p class="eyebrow">RESTRICTED WORKSPACE</p><h1>Welcome to operations.</h1><p>Verified administrators only. Use your individual Maison administrator account.</p><form id="login-form"><label>Email address<input id="login-email" type="email" autocomplete="username" maxlength="254" required></label><label>Password<input id="login-password" type="password" autocomplete="current-password" required></label><button class="solid" type="submit">Secure sign in</button></form><p id="login-status" role="status"></p></section>
+<div id="workspace" class="workspace" hidden>
+<aside class="side-nav"><p class="eyebrow">WORKSPACE</p>
+<button class="tab active" type="button" data-tab="overview">Overview</button>
+<button class="tab" type="button" data-tab="enquiries">Enquiries</button>
+<button class="tab" type="button" data-tab="circle">Maison Circle</button>
+<button class="tab" type="button" data-tab="activity">Activity</button>
+<button class="tab" type="button" data-tab="settings">Settings &amp; Security</button>
+<p class="nav-note">Orders · Products · Inventory · Checkout<br>Awaiting the next implementation phase</p>
+</aside>
+<div class="workspace-content">
+<div class="page-top"><p class="eyebrow">LA INFINITÉ / INTERNAL</p><span id="server-status" role="status">Connecting…</span></div>
+<section class="panel active" data-panel="overview">
+<h1>Maison overview.</h1><p class="lead">Your business, at a glance. Figures come from Firestore, never placeholders.</p>
+<div class="metric-grid"><div class="metric"><span>ALL ENQUIRIES</span><strong id="stat-enquiries">—</strong></div><div class="metric"><span>NEW ENQUIRIES</span><strong id="stat-new">—</strong></div><div class="metric"><span>INVITATIONS</span><strong id="stat-invites">—</strong></div><div class="metric"><span>ORDERS RECORDED</span><strong id="stat-orders">—</strong></div></div>
+<h2>What needs attention</h2><div id="overview-activity" class="feed"><p class="quiet">Loading current activity…</p></div>
+</section>
+<section class="panel" data-panel="enquiries">
+<div class="heading-row"><div><h1>Client enquiries.</h1><p class="lead">Respond, prioritize and resolve without leaving the workspace.</p></div><button class="outline" id="refresh-enquiries" type="button">Refresh</button></div>
+<div id="enquiries-list" class="records" aria-live="polite"></div><button class="outline" id="more-enquiries" hidden type="button">Load more</button>
+<div id="enquiry-detail" class="detail" hidden><div class="heading-row"><h2 id="detail-title">Enquiry</h2><button type="button" id="close-detail">Close</button></div><p id="detail-meta" class="quiet"></p><p id="detail-message" class="detail-message"></p>
+<form id="enquiry-update"><label>Status<select id="enquiry-status"><option>New</option><option>Open</option><option>In progress</option><option>Waiting for customer</option><option>Resolved</option><option>Closed</option></select></label><label>Priority<select id="enquiry-priority"><option>Normal</option><option>High</option><option>Urgent</option></select></label><label>Internal note (admin only)<textarea id="enquiry-note" maxlength="1000" rows="3" placeholder="Actions, context, follow-up…"></textarea></label><div class="actions"><button class="solid" type="submit">Save changes</button><a id="reply-link" class="outline" href="#" rel="noreferrer">Reply by email</a></div></form><p id="detail-status" role="status"></p></div>
+</section>
+<section class="panel" data-panel="circle">
+<h1>Maison Circle.</h1><p class="lead">Invite clients personally. Membership is activated only after they verify their own email address.</p>
+<div class="split"><form id="invite-form" class="form-card"><h2>Private invitation</h2><label>Client name<input name="name" required maxlength="120" autocomplete="off"></label><label>Client email<input name="email" type="email" required maxlength="254" autocomplete="off"></label><button class="solid" type="submit">Create invitation</button><p class="fine quiet">Creates a secure, seven-day invitation. No email is automatically sent. Share the link with the intended client privately.</p></form>
+<div class="invite-result" id="invite-result" hidden><h2>Invitation prepared.</h2><p id="invite-address"></p><label>One-time invitation link<textarea id="invite-url" rows="4" readonly></textarea></label><button class="outline" id="copy-invite" type="button">Copy invitation link</button><p class="fine">Treat this link as private. It expires after seven days and is tied to the recipient's verified email address.</p></div></div>
+<h2>Recent invitations</h2><div id="invite-list" class="records"></div>
+</section>
+<section class="panel" data-panel="activity"><h1>Activity.</h1><p class="lead">Operational alerts generated by actual backend events.</p><div id="activity-list" class="records"></div></section>
+<section class="panel" data-panel="settings"><h1>Settings &amp; security.</h1><p class="lead">Administrator access is enforced on the server using Firebase Auth custom claims.</p>
+<div class="settings-block"><h2>Browser notifications</h2><p>Receive operational alerts on this device, subject to browser permission and the server's web-push configuration.</p><button class="outline" id="enable-push" type="button">Enable notifications</button><p id="push-status" role="status" class="fine"></p><p class="fine quiet">On iPhone, first add this site to the Home Screen. Notification permission must be requested from the installed app.</p></div>
+<div class="settings-block"><h2>Administration</h2><p>Each administrator needs an individually verified Firebase account with an admin custom claim. Never share administrator logins or store passwords in website files.</p><p id="admin-identity" class="fine"></p></div>
+</section>
+</div></div>
+</main><footer class="ops-footer"><span>LA INFINITÉ (Pty) Ltd</span><span>INTERNAL / CONFIDENTIAL</span></footer>
+</body></html>

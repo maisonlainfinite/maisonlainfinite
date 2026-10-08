@@ -1,0 +1,19 @@
+{
+  "id": "/admin/",
+  "name": "LA INFINITÉ | Operations",
+  "short_name": "Maison Ops",
+  "description": "LA INFINITÉ private operations workspace",
+  "start_url": "/admin/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f2eb",
+  "theme_color": "#132538",
+  "icons": [
+    {
+      "src": "/assets/maison-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
