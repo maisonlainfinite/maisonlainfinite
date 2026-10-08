@@ -1,0 +1,7 @@
+{
+  "name": "la-infinite-maison",
+  "private": true,
+  "version": "1.0.0",
+  "description": "La Infinitè luxury maison storefront",
+  "scripts": {"build": "python3 scripts/build.py", "check": "node --check js/store.js && python3 scripts/check.py"}
+}

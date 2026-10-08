@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+Sitemap: https://la-infinite-maison.azurespark.chatgpt.site/sitemap.xml

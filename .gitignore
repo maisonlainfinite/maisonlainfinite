@@ -1,0 +1,7 @@
+.sites-runtime/
+.site-workflow/
+node_modules/
+__pycache__/
+.env
+.env.*
+!.env.example
