@@ -259,8 +259,10 @@
     $('[data-form-status]', form).textContent = `Your email draft is ready. Send it in your email app to reach the Maison. If nothing opens, use the link below or write to ${config.email}.`;
     location.href = href;
   }
+  const firebaseFormEnabled = Boolean(window.MAISON_FIREBASE?.apiKey && window.MAISON_FIREBASE?.projectId && window.MAISON_FIREBASE?.appCheckSiteKey);
   $$('[data-newsletter]').forEach((form) => form.addEventListener('submit', (e) => {
     e.preventDefault(); if (!form.reportValidity()) return;
+    if (firebaseFormEnabled) { $('[data-form-status]',form).textContent='Connecting securely. Please submit again in a moment.'; return; }
     const email = new FormData(form).get('email').trim();
     $('#newsletter-mail').href = emailUrl('Newsletter subscription request — LA INFINITÉ', `Hello LA INFINITÉ,\n\nPlease add ${email} to the Maison's email updates. I consent to receiving news about creations, collection previews and Maison services, and understand that I can unsubscribe at any time. I have read the Privacy notice.\n\nThank you.`);
     $('[data-form-status]', form).textContent = 'Your subscription request is ready to send by email.';
@@ -276,6 +278,7 @@
     else if (subject && !subjects[subject] && /^[a-z-]+$/.test(subject)) $('#contact-message').value = `I would like to enquire about the ${subject.replaceAll('-', ' ')} collection.\n\n`;
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault(); if (!contactForm.reportValidity()) return;
+      if (firebaseFormEnabled) { $('[data-form-status]',contactForm).textContent='Secure enquiry service is connecting. Please try again shortly.'; return; }
       const d = new FormData(contactForm);
       prepareEmail(contactForm, `${d.get('subject')} — LA INFINITÉ`, `Name: ${d.get('name')}\nEmail: ${d.get('email')}\n\n${d.get('message')}\n\nI have read the Privacy notice and understand that my information will be used to respond to this enquiry.`);
     });
