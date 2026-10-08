@@ -146,12 +146,16 @@ byId("enable-push").addEventListener("click",async()=>{
   }catch(error){setText("push-status",safely(error));}
 });
 async function checkSession(user) {
-  if(!user){visible("login",true);visible("workspace",false);visible("setup",false);visible("logout",false);return;}
+  if(!user){visible("login",true);visible("workspace",false);visible("setup",false);visible("logout",false);visible("admin-verify",false);return;}
   const token=await user.getIdTokenResult(true);
   if(token.claims.admin!==true||!user.emailVerified){
     visible("workspace",false);visible("login",true);visible("logout",true);
-    setText("login-status","This account is not a verified Maison administrator.");return;
+    visible("admin-verify",!user.emailVerified);
+    setText("login-status",!user.emailVerified
+      ? "Your email requires verification before this account can be authorized."
+      : "This account has not been granted Maison administrator access.");return;
   }
+  visible("admin-verify",false);
   visible("login",false);visible("setup",false);visible("workspace",true);visible("logout",true);
   setText("user-email",user.email);setText("admin-identity","Signed in: "+user.email+" · Authorized administrator");
   await Promise.all([loadOverview(),loadActivity("overview-activity")]);
@@ -162,6 +166,21 @@ byId("login-form").addEventListener("submit",async(e)=>{
   catch(error){setText("login-status","Sign-in failed. Check the credentials and administrator authorization.");}
 });
 byId("logout").addEventListener("click",async()=>{if(auth)await authSDK.signOut(auth);setText("user-email","");});
+byId("send-admin-verification").addEventListener("click",async()=>{
+  try {
+    if(!auth?.currentUser)throw Error("No account");
+    await authSDK.sendEmailVerification(auth.currentUser);
+    setText("login-status","Verification email requested. Check your inbox, then return here.");
+  }catch{setText("login-status","Unable to send verification email. Please retry.");}
+});
+byId("refresh-admin-verification").addEventListener("click",async()=>{
+  try {
+    await authSDK.reload(auth.currentUser);
+    await auth.currentUser.getIdToken(true);
+    await checkSession(auth.currentUser);
+  }catch{setText("login-status","Unable to check email verification.");}
+});
+
 async function main(){
   if(!configured){visible("setup",true);return;}
   try{
