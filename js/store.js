@@ -65,7 +65,7 @@
   });
 
   // Rotate one restrained, clickable collection announcement at a time.
-  const promoLinks = $('.promo-link');
+  const promoLinks = $$('.promo-link');
   if (promoLinks.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const bar = $('.promo-strip');
     let index = 0, interval;
