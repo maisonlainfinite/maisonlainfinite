@@ -242,7 +242,7 @@
   if (catalogue) {
     if ($('#page-search')) $('#page-search').value = searchQuery;
     $$('[data-filter], [data-sort]', catalogue).forEach((x) => x.addEventListener('change', applyFilters));
-    $('[data-clear-filters]', catalogue).forEach((button) => button.addEventListener('click', () => {
+    $$('[data-clear-filters]', catalogue).forEach((button) => button.addEventListener('click', () => {
       $$('[data-filter]', catalogue).forEach((x) => { x.value = 'all'; }); $('[data-sort]', catalogue).value = 'featured';
       searchQuery = ''; if ($('#page-search')) $('#page-search').value = '';
       if (catalogue.hasAttribute('data-search-page')) history.replaceState(null, '', route('search/'));
